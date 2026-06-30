@@ -60,7 +60,12 @@ impl User {
         height: f32,
         weight: f32,
         time_point: Option<DateTime>,
-    ) -> Self {
+    ) -> Result<Self, UserError> {
+        if weight < 10.0 {
+            return Err(UserError::WrongWeight);
+        } else if height < 30.0 {
+            return Err(UserError::WrongHeight);
+        }
         let data = UserData {
             gender,
             age,
@@ -70,10 +75,10 @@ impl User {
             time: time_point,
             weight,
         };
-        Self {
+        Ok(Self {
             data,
             weight: vec![weight_entry],
-        }
+        })
     }
     pub fn change_user_data(&mut self, data: UserData) {
         self.data = data;
@@ -89,15 +94,11 @@ impl User {
         self.weight.push(weight_entry);
     }
 
-    pub fn get_health_report(&self) -> Result<HealthReport, HealthError> {
-        let weight = self.get_last_weight().ok_or(HealthError::NoWeight)?;
+    pub fn get_health_report(&self) -> HealthReport {
+        let weight = self.get_last_weight().expect("failed to get weight");
         let height = self.data.height;
 
-        if height <= 0.0 {
-            return Err(HealthError::InvalidHeight);
-        }
-
-        let actual_bmi = calculate_bmi(weight, height).ok_or(HealthError::NoWeight)?;
+        let actual_bmi = calculate_bmi(weight, height);
         let age = self.data.age;
 
         let age_offset = match age {
@@ -138,23 +139,19 @@ impl User {
             Status::Obesity
         };
 
-        Ok(HealthReport {
+        HealthReport {
             bmi,
             target_weight,
             age_offset,
             actual_bmi,
             extra_weight,
             status,
-        })
+        }
     }
 }
 
-pub fn calculate_bmi(weight: f32, height: f32) -> Option<f32> {
-    if weight <= 0.0 || height <= 0.0 {
-        return None;
-    }
-    let bmi = (1.3 * weight / powf(height, 2.5)) * 1000.0;
-    Some(bmi)
+pub fn calculate_bmi(weight: f32, height: f32) -> f32 {
+    1.3 * weight / powf(height / 100.0, 2.5)
 }
 
 #[derive(Debug)]
@@ -179,6 +176,7 @@ pub enum HealthError {
     NoWeight,
     InvalidHeight,
 }
+#[derive(Debug)]
 pub enum UserError {
     WrongWeight,
     WrongHeight,
