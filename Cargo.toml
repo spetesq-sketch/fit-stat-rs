@@ -1,0 +1,16 @@
+[package]
+name = "BMI_calculator"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+
+[dependencies]
+libm = "0.2.16"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+strip = true
+lto = true
+panic = "abort"
