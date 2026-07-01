@@ -1,4 +1,4 @@
-use fit_stats::{Gender, Unit, User, UserData, UserError};
+use fit_stats_weight::{Gender, Unit, User, UserData, UserError};
 
 #[test]
 fn create_user() {

@@ -1,5 +1,5 @@
 use chrono::Utc;
-use fit_stats::{Gender, Unit, User};
+use fit_stats_weight::{Gender, Unit, User};
 
 fn main() {
     let time = Utc::now();

@@ -38,7 +38,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fit_stats = { version = "*", features = ["serde", "bincode", "chrono"] }
+fit-stats-weight = { version = "*", features = ["serde", "bincode", "chrono"] }
 ```
 
 ## Usage
@@ -52,7 +52,7 @@ If you use the imperial system, use inches for height
 ```rust
 
 use chrono;
-use fit_stats::{Gender, Unit, User};
+use fit_stats_weight::{Gender, Unit, User};
 
 fn main() {
     let time = chrono::Utc::now();
