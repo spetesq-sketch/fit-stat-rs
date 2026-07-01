@@ -6,6 +6,7 @@ extern crate alloc;
 
 use alloc::vec;
 use alloc::vec::Vec;
+use core::fmt;
 use libm::powf;
 
 #[cfg(feature = "bincode")]
@@ -41,18 +42,6 @@ pub enum Gender {
     None,
 }
 
-//////Custom struct for data ( i wanted to use chrono but no std doesnt support it)
-///#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-///#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-///#[cfg_attr(feature = "bincode", derive(Encode, Decode))]
-///pub struct DateTime {
-///    pub year: i32,
-///    pub month: u8,
-///    pub day: u8,
-///    pub hour: u8,
-///    pub minute: u8,
-///}
-
 /// Measurement system preference for the user's weight and height.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -62,18 +51,6 @@ pub enum Unit {
     Metric,
     Imperial,
 }
-
-// impl DateTime {
-//     pub fn new(year: i32, month: u8, day: u8, hour: u8, minute: u8) -> Self {
-//         Self {
-//             year,
-//             month,
-//             day,
-//             hour,
-//             minute,
-//         }
-//     }
-// }
 
 /// Represents a single weight measurement at a specific point in time.
 /// The `time` is stored as an optional Unix timestamp in milliseconds.
@@ -155,7 +132,10 @@ impl User {
     /// Retrieves the user's most recently recorded weight.
     /// Note: This relies on the internal weight history never being empty.
     pub fn get_last_weight(&self) -> f32 {
-        unsafe { self.weight.get_unchecked(self.weight.len() - 1).weight }
+        self.weight
+            .last()
+            .expect("User always has at least one weight entry")
+            .weight
     }
     /// Adds a new weight measurement to the user's history.
     ///
@@ -312,3 +292,16 @@ pub enum UserError {
     WrongHeight,
     NotFound,
 }
+impl fmt::Display for UserError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let msg = match self {
+            UserError::WrongWeight => "weight is too low",
+            UserError::WrongHeight => "height is too low",
+            UserError::NotFound => "item not found",
+        };
+
+        write!(f, "{msg}")
+    }
+}
+
+impl core::error::Error for UserError {}

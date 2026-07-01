@@ -38,28 +38,47 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-bmi_calculator = { version = "*", features = ["serde"] }
+fit_stats = { version = "*", features = ["serde", "bincode", "chrono"] }
 ```
 
 ## Usage
 
+You can check examples/ but there are few now
+
+### Warning
+
+If you use the imperial system, use inches for height
+
 ```rust
 
-use BMI_calculator::{Gender, Unit, User, chrono_time};
 use chrono;
+use fit_stats::{Gender, Unit, User};
 
 fn main() {
-    let time = chrono::Local::now();
+    let time = chrono::Utc::now();
     let user = User::new(
         Gender::Male, // Gender
         20,           // age
         185.0,        // height
         85.0,         // weight
         Some(Unit::Metric),
-        Some(chrono_time(time)),
+        Some(fit_stats::chrono_time(time)),
     )
     .unwrap(); // unwrap because the weight is not 0
-    println!("{:?}", user.get_health_report());
+    println!("{:#?}", user.get_health_report());
+}
+```
+
+### Result
+
+```
+HealthReport {
+    bmi: 23.737387,
+    target_weight: 76.25,
+    age_offset: 19.0,
+    actual_bmi: 23.737387,
+    extra_weight: 8.75,
+    status: NormalWeight,
 }
 ```
 

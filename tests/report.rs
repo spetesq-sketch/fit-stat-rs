@@ -1,4 +1,4 @@
-use BMI_calculator::{Gender, Unit, User};
+use fit_stats::{Gender, Unit, User};
 
 #[test]
 fn health_report_is_created() {

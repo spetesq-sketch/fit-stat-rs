@@ -1,26 +1,26 @@
-use BMI_calculator::{Gender, Unit, User, UserData, UserError};
+use fit_stats::{Gender, Unit, User, UserData, UserError};
 
 #[test]
 fn create_user() {
-    let user = User::new(BMI_calculator::Gender::Female, 15, 165.0, 45.0, None, None);
+    let user = User::new(Gender::Female, 15, 165.0, 45.0, None, None);
     assert!(user.is_ok())
 }
 
 #[test]
 fn create_user_wrong_weight() {
-    let user = User::new(BMI_calculator::Gender::Female, 15, 165.0, 0.0, None, None);
+    let user = User::new(Gender::Female, 15, 165.0, 0.0, None, None);
     assert!(user.is_err())
 }
 
 #[test]
 fn create_user_wrong_height() {
-    let user = User::new(BMI_calculator::Gender::Female, 15, 0.0, 50.0, None, None);
+    let user = User::new(Gender::Female, 15, 0.0, 50.0, None, None);
     assert!(user.is_err())
 }
 
 #[test]
 fn change_user_data() {
-    let mut user = User::new(BMI_calculator::Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
+    let mut user = User::new(Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
     let new_data = UserData {
         age: 124,
         gender: Gender::Male,
@@ -33,7 +33,7 @@ fn change_user_data() {
 
 #[test]
 fn change_user_data_wrong_height() {
-    let mut user = User::new(BMI_calculator::Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
+    let mut user = User::new(Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
     let new_data = UserData {
         age: 124,
         gender: Gender::Male,
@@ -62,7 +62,7 @@ fn add_weight_ok() -> Result<(), UserError> {
 
 #[test]
 fn add_weight_wrong() {
-    let mut user = User::new(BMI_calculator::Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
+    let mut user = User::new(Gender::Female, 15, 165.0, 50.0, None, None).unwrap();
     let result = user.add_weight(0.0, None);
     assert!(result.is_err())
 }

@@ -1,11 +1,12 @@
 [package]
 name = "fit-stats"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Lixtr <spetesq@gmail.com>"]
 license = "MIT"
 readme = "readme.md"
 description = "A minimalist lib to caclulate BIM"
+repository = "https://github.com/spetesq-sketch/fit-stat-rs"
 
 [lib]
 
