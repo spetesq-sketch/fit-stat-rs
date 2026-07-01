@@ -2,10 +2,19 @@
 name = "BMI_calculator"
 version = "0.1.0"
 edition = "2024"
+authors = ["Lixtr <spetesq@gmail.com>"]
+license = "MIT"
+readme = "readme.md"
+description = "A minimalist lib to caclulate BIM"
 
 [lib]
 
 [dependencies]
+chrono = { version = "0.4.45", default-features = false, features = [
+  "alloc",
+  "serde",
+], optional = true }
+
 libm = "0.2.16"
 serde = { version = "1.0.228", default-features = false, features = [
   "derive",
@@ -14,13 +23,14 @@ serde = { version = "1.0.228", default-features = false, features = [
 bincode-next = { version = "3.1", default-features = false, features = [
   "alloc",
   "derive",
+  "serde",
 ], optional = true }
-
 [features]
 default = []
 
 serde = ["dep:serde"]
 bincode = ["dep:bincode-next"]
+chrono = ["dep:chrono"]
 
 [profile.release]
 opt-level = 3
